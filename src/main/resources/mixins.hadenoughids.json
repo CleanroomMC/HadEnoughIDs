@@ -1,0 +1,16 @@
+{
+  "package": "com.cleanroommc.hadenoughids.core.mixins",
+  "refmap": "mixins.hadenoughids.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BlockMixin",
+    "ForgeRegistryAccessor",
+    "RegistryManagerAccessor",
+    "StatListMixin"
+  ],
+  "client": [
+    "RenderGlobalMixin"
+  ]
+}
