@@ -131,6 +131,7 @@ public class SPacketEntityEffectVisitor extends ClassVisitor implements Opcodes 
             if (tries < 2 && name.equals("readByte")) {
                 tries++;
                 super.visitMethodInsn(opcode, owner, "readInt", desc, itf);
+                return;
             }
             super.visitMethodInsn(opcode, owner, name, desc, itf);
         }
@@ -149,7 +150,8 @@ public class SPacketEntityEffectVisitor extends ClassVisitor implements Opcodes 
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
             if (tries < 2 && name.equals("writeByte")) {
                 tries++;
-
+                super.visitMethodInsn(opcode, owner, "writeInt", desc, itf);
+                return;
             }
             super.visitMethodInsn(opcode, owner, name, desc, itf);
         }
