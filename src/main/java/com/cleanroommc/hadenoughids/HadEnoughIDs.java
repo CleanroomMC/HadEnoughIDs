@@ -27,14 +27,16 @@ public class HadEnoughIDs {
 
     @EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
-        IForgeRegistry<Block> blockRegistry = GameRegistry.findRegistry(Block.class);
-        IForgeRegistry<Item> itemRegistry = GameRegistry.findRegistry(Item.class);
-        for (int i = 0; i < 5000; i++) {
-            Block block = new BlockFalling(Material.GROUND)
-                    .setCreativeTab(CreativeTabs.BUILDING_BLOCKS)
-                    .setRegistryName(new ResourceLocation("hadenoughids:block_" + i));
-            blockRegistry.register(block);
-            itemRegistry.register(new ItemBlock(block).setRegistryName(new ResourceLocation("hadenoughids:block_" + i)));
+        if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
+            IForgeRegistry<Block> blockRegistry = GameRegistry.findRegistry(Block.class);
+            IForgeRegistry<Item> itemRegistry = GameRegistry.findRegistry(Item.class);
+            for (int i = 0; i < 5000; i++) {
+                Block block = new BlockFalling(Material.GROUND)
+                        .setCreativeTab(CreativeTabs.BUILDING_BLOCKS)
+                        .setRegistryName(new ResourceLocation("hadenoughids:block_" + i));
+                blockRegistry.register(block);
+                itemRegistry.register(new ItemBlock(block).setRegistryName(new ResourceLocation("hadenoughids:block_" + i)));
+            }
         }
     }
 
