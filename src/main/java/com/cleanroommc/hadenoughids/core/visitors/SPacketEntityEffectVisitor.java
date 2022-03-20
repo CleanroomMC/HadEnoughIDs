@@ -72,7 +72,7 @@ public class SPacketEntityEffectVisitor extends ClassVisitor implements Opcodes 
         Label start = new Label();
         methodVisitor.visitLabel(start);
         methodVisitor.visitVarInsn(ALOAD, 0);
-        methodVisitor.visitFieldInsn(ACC_PRIVATE, classType, fieldName, "I");
+        methodVisitor.visitFieldInsn(GETFIELD, classType, fieldName, "I");
         methodVisitor.visitInsn(IRETURN);
         Label end = new Label();
         methodVisitor.visitLabel(end);
