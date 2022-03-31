@@ -1,6 +1,7 @@
 package com.cleanroommc.hadenoughids.core;
 
 import com.cleanroommc.hadenoughids.core.visitors.GameDataVisitor;
+import com.cleanroommc.hadenoughids.core.visitors.NetHandlerPlayClientVisitor;
 import com.cleanroommc.hadenoughids.core.visitors.SPacketEntityEffectVisitor;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
@@ -21,6 +22,12 @@ public class HadEnoughIDsTransformer implements IClassTransformer {
             {
                 ClassWriter classWriter = new ClassWriter(0);
                 new ClassReader(classBytes).accept(new SPacketEntityEffectVisitor(classWriter), 0);
+                return classWriter.toByteArray();
+            }
+            case NetHandlerPlayClientVisitor.CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new NetHandlerPlayClientVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
         }
