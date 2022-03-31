@@ -9,6 +9,11 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
 
     public static final String DELEGATED_INIT_METHOD_DESC = "(Lnet/minecraft/item/Item;IILnet/minecraft/nbt/NBTTagCompound;)V";
     public static final String NBT_INIT_METHOD_DESC = "(Lnet/minecraft/nbt/NBTTagCompound;)V";
+    public static final String IS_EMPTY_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "isEmpty" : "func_190926_b";
+
+    private static final String ITEM_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "item" : "field_151002_e";
+    private static final String ITEM_DAMAGE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "itemDamage" : "field_77991_e";
+
 
     public ItemStackVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
@@ -23,13 +28,14 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
             } else if (desc.equals(NBT_INIT_METHOD_DESC)) {
                 return new NBTInitMethodVisitor(visitor);
             }
+        } else if (name.equals(IS_EMPTY_METHOD)) {
+            return new IsEmptyMethodVisitor(visitor);
         }
         return visitor;
     }
 
     private static class DelegatedInitMethodVisitor extends MethodVisitor {
 
-        private static final String ITEM_DAMAGE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "itemDamage" : "field_77991_e";
         private static final String STACK_SIZE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "stackSize" : "field_77994_a";
 
         private boolean removeItemDamageChecks = false;
@@ -112,8 +118,6 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
 
     private static class NBTInitMethodVisitor extends MethodVisitor {
 
-        private static final String ITEM_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "item" : "field_151002_e";
-
         private boolean removeItemDamageChecks = false;
 
         private NBTInitMethodVisitor(MethodVisitor methodVisitor) {
@@ -170,6 +174,95 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 return;
             }
             super.visitMethodInsn(opcode, owner, name, desc, itf);
+        }
+
+    }
+
+    private static class IsEmptyMethodVisitor extends MethodVisitor {
+
+        private boolean wipeItemDamageTernaryChecks = false;
+
+        private IsEmptyMethodVisitor(MethodVisitor methodVisitor) {
+            super(ASM5, methodVisitor);
+        }
+
+        @Override
+        public void visitFieldInsn(int opcode, String owner, String name, String desc) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            if (ITEM_DAMAGE_FIELD.equals(name)) {
+                wipeItemDamageTernaryChecks = true;
+            }
+            super.visitFieldInsn(opcode, owner, name, desc);
+        }
+
+        @Override
+        public void visitInsn(int opcode) {
+            if (wipeItemDamageTernaryChecks) {
+                if (opcode != IRETURN) {
+                    return;
+                }
+                wipeItemDamageTernaryChecks = false;
+                // super.visitFrame(F_SAME1, 0, new Object[] { }, 1, new Object[] { INTEGER });
+                super.visitVarInsn(ALOAD, 0);
+                super.visitFieldInsn(GETFIELD, "net/minecraft/item/ItemStack", ITEM_FIELD, "Lnet/minecraft/item/Item;");
+                super.visitMethodInsn(
+                        INVOKESTATIC,
+                        "com/cleanroommc/hadenoughids/core/visitors/hooks/UniversalHooks",
+                        "getDamageSignifyEmpty",
+                        "(ILnet/minecraft/item/Item;)Z",
+                        false);
+            }
+            super.visitInsn(opcode);
+        }
+
+        @Override
+        public void visitJumpInsn(int opcode, Label label) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            super.visitJumpInsn(opcode, label);
+        }
+
+        @Override
+        public void visitVarInsn(int opcode, int var) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            super.visitVarInsn(opcode, var);
+        }
+
+        @Override
+        public void visitLdcInsn(Object cst) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            super.visitLdcInsn(cst);
+        }
+
+        @Override
+        public void visitLabel(Label label) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            super.visitLabel(label);
+        }
+
+        @Override
+        public void visitLineNumber(int line, Label start) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            super.visitLineNumber(line, start);
+        }
+
+        @Override
+        public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            super.visitFrame(type, nLocal, local, nStack, stack);
         }
 
     }

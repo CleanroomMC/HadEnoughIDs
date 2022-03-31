@@ -1,10 +1,12 @@
 package com.cleanroommc.hadenoughids.api;
 
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
 /**
- * This interface should be implemented in your {@link net.minecraft.item.Item} extensions.
+ * This interface should be implemented in your {@link Item} extensions.
  *
- * This will be checked when serializing/saving/deserializing/loading from NBT tags
- *
+ * This will be checked when serializing/saving/deserializing/loading from NBT tags, and on {@link ItemStack#isEmpty()}
  */
 public interface IItemWithExtendedDamage {
 
@@ -20,6 +22,20 @@ public interface IItemWithExtendedDamage {
      */
     default int getMaxDamage() {
         return Short.MAX_VALUE; // Default in vanilla, ItemStack serializes damage values to shorts in NBT
+    }
+
+    /**
+     * @return what the minimum damage the Item's stack can have before isEmpty is true. CAN be negative.
+     */
+    default int getMinEmptyDamage() {
+        return -32768; // Default in vanilla
+    }
+
+    /**
+     * @return what the maximum damage the Item's stack can have before isEmpty is true. CAN be negative.
+     */
+    default int getMaxEmptyDamage() {
+        return 65535; // Default in vanilla
     }
 
 }
