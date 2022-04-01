@@ -65,7 +65,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 super.visitMethodInsn(
                         INVOKESTATIC,
                         "com/cleanroommc/hadenoughids/core/visitors/hooks/UniversalHooks",
-                        "getCorrectItemDamage",
+                        "getCorrectItemMetadata",
                         "(ILnet/minecraft/item/Item;)I",
                         false);
             } else if (STACK_SIZE_FIELD.equals(name)) {
@@ -134,7 +134,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 super.visitMethodInsn(
                         INVOKESTATIC,
                         "com/cleanroommc/hadenoughids/core/visitors/hooks/UniversalHooks",
-                        "getCorrectItemDamageFromNBT",
+                        "getCorrectItemMetadataFromNBT",
                         "(Lnet/minecraft/item/Item;Lnet/minecraft/nbt/NBTTagCompound;)I",
                         false);
             }
@@ -210,7 +210,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 super.visitMethodInsn(
                         INVOKESTATIC,
                         "com/cleanroommc/hadenoughids/core/visitors/hooks/UniversalHooks",
-                        "getDamageSignifyEmpty",
+                        "getMetadataSignifyEmpty",
                         "(ILnet/minecraft/item/Item;)Z",
                         false);
             }

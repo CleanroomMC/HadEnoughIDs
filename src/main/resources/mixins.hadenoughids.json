@@ -8,7 +8,8 @@
     "BlockMixin",
     "ForgeRegistryAccessor",
     "RegistryManagerAccessor",
-    "StatListMixin"
+    "StatListMixin",
+    "recipe.ShapelessRecipesMixin"
   ],
   "client": [
     "RenderGlobalMixin"
