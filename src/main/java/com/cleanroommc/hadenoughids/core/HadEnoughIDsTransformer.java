@@ -1,9 +1,6 @@
 package com.cleanroommc.hadenoughids.core;
 
-import com.cleanroommc.hadenoughids.core.visitors.GameDataVisitor;
-import com.cleanroommc.hadenoughids.core.visitors.ItemStackVisitor;
-import com.cleanroommc.hadenoughids.core.visitors.NetHandlerPlayClientVisitor;
-import com.cleanroommc.hadenoughids.core.visitors.SPacketEntityEffectVisitor;
+import com.cleanroommc.hadenoughids.core.visitors.*;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -35,6 +32,25 @@ public class HadEnoughIDsTransformer implements IClassTransformer {
             {
                 ClassWriter classWriter = new ClassWriter(0);
                 new ClassReader(classBytes).accept(new ItemStackVisitor(classWriter), 0);
+                return classWriter.toByteArray();
+            }
+            case ItemStackPacketVisitor.PACKET_UTIL_CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new ItemStackPacketVisitor(classWriter, s -> s.equals(ItemStackPacketVisitor.WRITE_ITEMSTACK_FROM_CLIENT_TO_SERVER_METHOD)), 0);
+                return classWriter.toByteArray();
+            }
+            case ItemStackPacketVisitor.PACKET_BUFFER_CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new ItemStackPacketVisitor(classWriter,
+                        s -> s.equals(ItemStackPacketVisitor.WRITE_ITEMSTACK) || s.equals(ItemStackPacketVisitor.READ_ITEMSTACK)), 0);
+                return classWriter.toByteArray();
+            }
+            case ItemVisitor.CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new ItemVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
         }

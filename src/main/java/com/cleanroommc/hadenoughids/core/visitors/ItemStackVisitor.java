@@ -10,10 +10,10 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
     public static final String DELEGATED_INIT_METHOD_DESC = "(Lnet/minecraft/item/Item;IILnet/minecraft/nbt/NBTTagCompound;)V";
     public static final String NBT_INIT_METHOD_DESC = "(Lnet/minecraft/nbt/NBTTagCompound;)V";
     public static final String IS_EMPTY_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "isEmpty" : "func_190926_b";
+    public static final String WRITE_TO_NBT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeToNBT" : "func_77955_b";
 
-    private static final String ITEM_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "item" : "field_151002_e";
-    private static final String ITEM_DAMAGE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "itemDamage" : "field_77991_e";
-
+    public static final String ITEM_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "item" : "field_151002_e";
+    public static final String ITEM_DAMAGE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "itemDamage" : "field_77991_e";
 
     public ItemStackVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
@@ -30,6 +30,8 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
             }
         } else if (name.equals(IS_EMPTY_METHOD)) {
             return new IsEmptyMethodVisitor(visitor);
+        } else if (name.equals(WRITE_TO_NBT_METHOD)) {
+            return new WriteToNBTMethodVisitor(visitor);
         }
         return visitor;
     }
@@ -218,6 +220,14 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
         }
 
         @Override
+        public void visitIntInsn(int opcode, int operand) {
+            if (wipeItemDamageTernaryChecks) {
+                return;
+            }
+            super.visitIntInsn(opcode, operand);
+        }
+
+        @Override
         public void visitJumpInsn(int opcode, Label label) {
             if (wipeItemDamageTernaryChecks) {
                 return;
@@ -263,6 +273,26 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 return;
             }
             super.visitFrame(type, nLocal, local, nStack, stack);
+        }
+
+    }
+
+    private static class WriteToNBTMethodVisitor extends MethodVisitor {
+
+        private static final String SET_SHORT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "setShort" : "func_74777_a";
+        private static final String SET_INTEGER_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "setInteger" : "func_74768_a";
+
+        private WriteToNBTMethodVisitor(MethodVisitor methodVisitor) {
+            super(ASM5, methodVisitor);
+        }
+
+        @Override
+        public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
+            if (SET_SHORT_METHOD.equals(name)) {
+                super.visitMethodInsn(opcode, owner, SET_INTEGER_METHOD, desc.replace(";S", ";I"), itf);
+                return;
+            }
+            super.visitMethodInsn(opcode, owner, name, desc, itf);
         }
 
     }

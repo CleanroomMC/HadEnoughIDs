@@ -2,6 +2,7 @@ package com.cleanroommc.hadenoughids;
 
 import com.cleanroommc.hadenoughids.core.mixins.ForgeRegistryAccessor;
 import com.cleanroommc.hadenoughids.core.mixins.RegistryManagerAccessor;
+import com.cleanroommc.hadenoughids.test.TestItem;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minecraft.block.Block;
@@ -11,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -22,14 +24,19 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryManager;
 
-@Mod(modid = "hadenoughids", name = "HadEnoughIDs", version = "1.0")
+@Mod(modid = HadEnoughIDs.MOD_ID, name = "HadEnoughIDs", version = "1.0")
 public class HadEnoughIDs {
+
+    public static final String MOD_ID = "hadenoughids";
 
     @EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
             IForgeRegistry<Block> blockRegistry = GameRegistry.findRegistry(Block.class);
             IForgeRegistry<Item> itemRegistry = GameRegistry.findRegistry(Item.class);
+            IForgeRegistry<IRecipe> recipeRegistry = GameRegistry.findRegistry(IRecipe.class);
+            itemRegistry.register(TestItem.INSTANCE);
+            TestItem.addRecipes(recipeRegistry);
             for (int i = 0; i < 5000; i++) {
                 Block block = new BlockFalling(Material.GROUND)
                         .setCreativeTab(CreativeTabs.BUILDING_BLOCKS)
