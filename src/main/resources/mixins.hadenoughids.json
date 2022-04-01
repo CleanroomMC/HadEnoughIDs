@@ -9,6 +9,7 @@
     "ForgeRegistryAccessor",
     "RegistryManagerAccessor",
     "StatListMixin",
+    "recipe.ShapelessOreRecipeMixin",
     "recipe.ShapelessRecipesMixin"
   ],
   "client": [

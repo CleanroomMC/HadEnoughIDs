@@ -1,4 +1,4 @@
-package com.cleanroommc.hadenoughids.core.visitors.hooks;
+package com.cleanroommc.hadenoughids.core.hooks;
 
 import com.cleanroommc.hadenoughids.api.IItemWithExtendedMetadata;
 import net.minecraft.item.Item;

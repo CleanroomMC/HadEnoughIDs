@@ -3,11 +3,10 @@ package com.cleanroommc.hadenoughids.core.mixins.recipe;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.RecipeMatcher;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,11 +15,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mixin(ShapelessRecipes.class)
-public class ShapelessRecipesMixin {
+@Mixin(ShapelessOreRecipe.class)
+public class ShapelessOreRecipeMixin {
 
-    @Shadow(remap = false) @Final private boolean isSimple;
-    @Shadow @Final public NonNullList<Ingredient> recipeItems;
+    @Shadow(remap = false) protected boolean isSimple;
+    @Shadow(remap = false) protected NonNullList<Ingredient> input;
 
     /**
      * @author Rongmario
@@ -35,10 +34,10 @@ public class ShapelessRecipesMixin {
                 ItemStack stack = inv.getStackInSlot(i);
                 if (!stack.isEmpty() && !stack.isItemDamaged() && !stack.isItemEnchanted() && !stack.hasDisplayName()) {
                     if (ingredients == null) {
-                        ingredients = new ArrayList<>(recipeItems);
+                        ingredients = new ArrayList<>(input);
                     }
-                    for (int j = 0; j < recipeItems.size(); j++) {
-                        Ingredient ingredient = recipeItems.get(j);
+                    for (int j = 0; j < input.size(); j++) {
+                        Ingredient ingredient = input.get(j);
                         if (ingredient.test(stack)) {
                             if (ingredients.get(j) == null) {
                                 return false;
@@ -68,7 +67,7 @@ public class ShapelessRecipesMixin {
                     }
                 }
             }
-            return inputs.size() == this.recipeItems.size() && RecipeMatcher.findMatches(inputs, this.recipeItems) != null;
+            return inputs.size() == this.input.size() && RecipeMatcher.findMatches(inputs, this.input) != null;
         }
     }
 

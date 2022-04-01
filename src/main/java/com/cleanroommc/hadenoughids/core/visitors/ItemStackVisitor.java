@@ -64,7 +64,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 super.visitVarInsn(ALOAD, 1);
                 super.visitMethodInsn(
                         INVOKESTATIC,
-                        "com/cleanroommc/hadenoughids/core/visitors/hooks/UniversalHooks",
+                        "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
                         "getCorrectItemMetadata",
                         "(ILnet/minecraft/item/Item;)I",
                         false);
@@ -133,7 +133,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 super.visitVarInsn(ALOAD, 1);
                 super.visitMethodInsn(
                         INVOKESTATIC,
-                        "com/cleanroommc/hadenoughids/core/visitors/hooks/UniversalHooks",
+                        "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
                         "getCorrectItemMetadataFromNBT",
                         "(Lnet/minecraft/item/Item;Lnet/minecraft/nbt/NBTTagCompound;)I",
                         false);
@@ -209,7 +209,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 super.visitFieldInsn(GETFIELD, "net/minecraft/item/ItemStack", ITEM_FIELD, "Lnet/minecraft/item/Item;");
                 super.visitMethodInsn(
                         INVOKESTATIC,
-                        "com/cleanroommc/hadenoughids/core/visitors/hooks/UniversalHooks",
+                        "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
                         "getMetadataSignifyEmpty",
                         "(ILnet/minecraft/item/Item;)Z",
                         false);
