@@ -38,4 +38,8 @@ public class UniversalHooks {
         return damage < -32768 || damage > 65535;
     }
 
+    public static int getMinMetadata(Item item) {
+        return item instanceof IItemWithExtendedMetadata ? ((IItemWithExtendedMetadata) item).getMinMetadata() : 0;
+    }
+
 }

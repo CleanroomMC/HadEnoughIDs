@@ -208,7 +208,13 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 wipeItemDamageTernaryChecks = false;
                 // super.visitFrame(F_SAME1, 0, new Object[] { }, 1, new Object[] { INTEGER });
                 super.visitVarInsn(ALOAD, 0);
-                super.visitFieldInsn(GETFIELD, "net/minecraft/item/ItemStack", ITEM_FIELD, "Lnet/minecraft/item/Item;");
+                // super.visitFieldInsn(GETFIELD, "net/minecraft/item/ItemStack", ITEM_FIELD, "Lnet/minecraft/item/Item;");
+                super.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "net/minecraft/item/ItemStack",
+                        "getItemRaw",
+                        "()Lnet/minecraft/item/Item;",
+                        false);
                 super.visitMethodInsn(
                         INVOKESTATIC,
                         "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",

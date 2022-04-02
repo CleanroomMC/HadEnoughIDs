@@ -18,15 +18,7 @@ public class TestItem extends Item implements IItemWithExtendedMetadata {
     public static final TestItem INSTANCE = new TestItem();
 
     public static void addRecipes(IForgeRegistry<IRecipe> registry) {
-        ShapelessRecipes shapeless = new ShapelessRecipes(
-                "test",
-                new ItemStack(INSTANCE, 64, 69696),
-                NonNullList.from(
-                        Ingredient.fromStacks(new ItemStack(INSTANCE, 64, -69)),
-                        Ingredient.fromStacks(new ItemStack(INSTANCE, 64, 19696)),
-                        Ingredient.fromStacks(new ItemStack(INSTANCE, 64, 50069))
-                )
-        );
+        ShapelessRecipes shapeless = new TestRecipe();
         shapeless.setRegistryName(MOD_ID, "sixninesixninesix");
         registry.register(shapeless);
     }
@@ -35,12 +27,13 @@ public class TestItem extends Item implements IItemWithExtendedMetadata {
         setHasSubtypes(true);
         setCreativeTab(CreativeTabs.MISC);
         setRegistryName(MOD_ID, "test_meta_item");
+        setTranslationKey("meta_test_item");
     }
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
         if (this.isInCreativeTab(tab)) {
-            for (int i = getMinMetadata(); i < getMaxMetadata(); i++) {
+            for (int i = getMinMetadata(); i <= getMaxMetadata(); i++) {
                 if (i == OreDictionary.WILDCARD_VALUE) {
                     continue;
                 }
@@ -72,6 +65,20 @@ public class TestItem extends Item implements IItemWithExtendedMetadata {
     @Override
     public int getMaxEmptyMetadata() {
         return getMaxMetadata();
+    }
+
+    private static class TestRecipe extends ShapelessRecipes {
+
+        private TestRecipe() {
+            super("test",
+                    new ItemStack(INSTANCE, 64, 69696),
+                    NonNullList.from(
+                            Ingredient.fromStacks(new ItemStack(INSTANCE, 1, -69)),
+                            Ingredient.fromStacks(new ItemStack(INSTANCE, 1, 19696)),
+                            Ingredient.fromStacks(new ItemStack(INSTANCE, 1, 50069))
+                    ));
+        }
+
     }
 
 }
