@@ -67,8 +67,8 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                 super.visitMethodInsn(
                         INVOKESTATIC,
                         "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
-                        "getCorrectItemMetadata",
-                        "(ILnet/minecraft/item/Item;)I",
+                        "getCautiousCorrectItemMetadata",
+                        "(ILcom/cleanroommc/hadenoughids/api/IItemMetadataExtension;)I",
                         false);
             } else if (STACK_SIZE_FIELD.equals(name)) {
                 removeItemDamageChecks = true;
@@ -131,13 +131,18 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
             if (removeItemDamageChecks) {
                 removeItemDamageChecks = false;
                 super.visitVarInsn(ALOAD, 0);
-                super.visitFieldInsn(GETFIELD, owner, ITEM_FIELD, "Lnet/minecraft/item/Item;");
+                super.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "net/minecraft/item/ItemStack",
+                        "getItemRaw",
+                        "()Lnet/minecraft/item/Item;",
+                        false);
                 super.visitVarInsn(ALOAD, 1);
                 super.visitMethodInsn(
                         INVOKESTATIC,
                         "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
                         "getCorrectItemMetadataFromNBT",
-                        "(Lnet/minecraft/item/Item;Lnet/minecraft/nbt/NBTTagCompound;)I",
+                        "(Lcom/cleanroommc/hadenoughids/api/IItemMetadataExtension;Lnet/minecraft/nbt/NBTTagCompound;)I",
                         false);
             }
             super.visitFieldInsn(opcode, owner, name, desc);
@@ -145,7 +150,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
 
         @Override
         public void visitInsn(int opcode) {
-            if (opcode == ICONST_0) {
+            if (!removeItemDamageChecks && opcode == ICONST_0) {
                 removeItemDamageChecks = true;
                 return;
             } else if (removeItemDamageChecks) {
@@ -182,33 +187,16 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
 
     private static class IsEmptyMethodVisitor extends MethodVisitor {
 
-        private boolean wipeItemDamageTernaryChecks = false;
+        // private boolean wipeItemDamageTernaryChecks = false;
 
         private IsEmptyMethodVisitor(MethodVisitor methodVisitor) {
             super(ASM5, methodVisitor);
         }
 
         @Override
-        public void visitFieldInsn(int opcode, String owner, String name, String desc) {
-            if (wipeItemDamageTernaryChecks) {
-                return;
-            }
-            if (ITEM_DAMAGE_FIELD.equals(name)) {
-                wipeItemDamageTernaryChecks = true;
-            }
-            super.visitFieldInsn(opcode, owner, name, desc);
-        }
-
-        @Override
-        public void visitInsn(int opcode) {
-            if (wipeItemDamageTernaryChecks) {
-                if (opcode != IRETURN) {
-                    return;
-                }
-                wipeItemDamageTernaryChecks = false;
-                // super.visitFrame(F_SAME1, 0, new Object[] { }, 1, new Object[] { INTEGER });
+        public void visitIntInsn(int opcode, int operand) {
+            if (operand == -32768) {
                 super.visitVarInsn(ALOAD, 0);
-                // super.visitFieldInsn(GETFIELD, "net/minecraft/item/ItemStack", ITEM_FIELD, "Lnet/minecraft/item/Item;");
                 super.visitMethodInsn(
                         INVOKEVIRTUAL,
                         "net/minecraft/item/ItemStack",
@@ -216,69 +204,35 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
                         "()Lnet/minecraft/item/Item;",
                         false);
                 super.visitMethodInsn(
-                        INVOKESTATIC,
-                        "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
-                        "getMetadataSignifyEmpty",
-                        "(ILnet/minecraft/item/Item;)Z",
+                        INVOKEVIRTUAL,
+                        "net/minecraft/item/Item",
+                        "getMinEmptyMetadata",
+                        "()I",
                         false);
-            }
-            super.visitInsn(opcode);
-        }
-
-        @Override
-        public void visitIntInsn(int opcode, int operand) {
-            if (wipeItemDamageTernaryChecks) {
                 return;
             }
             super.visitIntInsn(opcode, operand);
         }
 
         @Override
-        public void visitJumpInsn(int opcode, Label label) {
-            if (wipeItemDamageTernaryChecks) {
-                return;
-            }
-            super.visitJumpInsn(opcode, label);
-        }
-
-        @Override
-        public void visitVarInsn(int opcode, int var) {
-            if (wipeItemDamageTernaryChecks) {
-                return;
-            }
-            super.visitVarInsn(opcode, var);
-        }
-
-        @Override
         public void visitLdcInsn(Object cst) {
-            if (wipeItemDamageTernaryChecks) {
+            if (cst instanceof Integer && (Integer) cst == 65535) {
+                super.visitVarInsn(ALOAD, 0);
+                super.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "net/minecraft/item/ItemStack",
+                        "getItemRaw",
+                        "()Lnet/minecraft/item/Item;",
+                        false);
+                super.visitMethodInsn(
+                        INVOKEVIRTUAL,
+                        "net/minecraft/item/Item",
+                        "getMaxEmptyMetadata",
+                        "()I",
+                        false);
                 return;
             }
             super.visitLdcInsn(cst);
-        }
-
-        @Override
-        public void visitLabel(Label label) {
-            if (wipeItemDamageTernaryChecks) {
-                return;
-            }
-            super.visitLabel(label);
-        }
-
-        @Override
-        public void visitLineNumber(int line, Label start) {
-            if (wipeItemDamageTernaryChecks) {
-                return;
-            }
-            super.visitLineNumber(line, start);
-        }
-
-        @Override
-        public void visitFrame(int type, int nLocal, Object[] local, int nStack, Object[] stack) {
-            if (wipeItemDamageTernaryChecks) {
-                return;
-            }
-            super.visitFrame(type, nLocal, local, nStack, stack);
         }
 
     }

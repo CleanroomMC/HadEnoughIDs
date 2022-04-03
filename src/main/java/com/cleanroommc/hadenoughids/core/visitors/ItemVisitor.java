@@ -1,5 +1,6 @@
 package com.cleanroommc.hadenoughids.core.visitors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.objectweb.asm.*;
 
 public class ItemVisitor extends ClassVisitor implements Opcodes {
@@ -8,6 +9,11 @@ public class ItemVisitor extends ClassVisitor implements Opcodes {
 
     public ItemVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
+    }
+
+    @Override
+    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+        super.visit(version, access, name, signature, superName, ArrayUtils.add(interfaces, "com/cleanroommc/hadenoughids/api/IItemMetadataExtension"));
     }
 
     @Override
@@ -45,7 +51,7 @@ public class ItemVisitor extends ClassVisitor implements Opcodes {
                         INVOKESTATIC,
                         "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
                         "getCorrectItemMetadata",
-                        "(ILnet/minecraft/item/Item;)I",
+                        "(ILcom/cleanroommc/hadenoughids/api/IItemMetadataExtension;)I",
                         false);
                 wipe = true;
             }

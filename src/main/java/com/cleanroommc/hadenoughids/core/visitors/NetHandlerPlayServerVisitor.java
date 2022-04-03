@@ -44,10 +44,10 @@ public class NetHandlerPlayServerVisitor extends ClassVisitor implements Opcodes
                         "()Lnet/minecraft/item/Item;",
                         false);
                 super.visitMethodInsn(
-                        INVOKESTATIC,
-                        "com/cleanroommc/hadenoughids/core/hooks/UniversalHooks",
+                        INVOKEVIRTUAL,
+                        "net/minecraft/item/Item",
                         "getMinMetadata",
-                        "(Lnet/minecraft/item/Item;)I",
+                        "()I",
                         false);
                 super.visitJumpInsn(IF_ICMPLT, label);
                 return;

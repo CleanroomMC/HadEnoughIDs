@@ -1,6 +1,6 @@
 package com.cleanroommc.hadenoughids.core.hooks;
 
-import com.cleanroommc.hadenoughids.api.IItemWithExtendedMetadata;
+import com.cleanroommc.hadenoughids.api.IItemMetadataExtension;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -12,34 +12,22 @@ public class UniversalHooks {
     }
 
     @SuppressWarnings("all")
-    public static int getCorrectItemMetadata(int damage, Item item) {
-        if (item instanceof IItemWithExtendedMetadata) {
-            IItemWithExtendedMetadata casted = (IItemWithExtendedMetadata) item;
-            return damage < casted.getMinMetadata() ? casted.getMinMetadata() : damage > casted.getMaxMetadata() ? casted.getMaxMetadata() : damage;
-        }
-        return damage < 0 ? 0 : damage;
+    public static int getCorrectItemMetadata(int damage, IItemMetadataExtension item) {
+        return damage < item.getMinMetadata() ? item.getMinMetadata() : damage > item.getMaxMetadata() ? item.getMaxMetadata() : damage;
     }
 
     @SuppressWarnings("all")
-    public static int getCorrectItemMetadataFromNBT(Item item, NBTTagCompound nbt) {
-        if (item instanceof IItemWithExtendedMetadata) {
-            IItemWithExtendedMetadata casted = (IItemWithExtendedMetadata) item;
-            int damage = nbt.getInteger("Metadata");
-            return damage < casted.getMinMetadata() ? casted.getMinMetadata() : damage > casted.getMaxMetadata() ? casted.getMaxMetadata() : damage;
+    public static int getCautiousCorrectItemMetadata(int damage, IItemMetadataExtension item) {
+        if (item == null) {
+            return damage < 0 ? 0 : damage;
         }
-        return Math.max(0, nbt.getShort("Metadata"));
+        return damage < item.getMinMetadata() ? item.getMinMetadata() : damage > item.getMaxMetadata() ? item.getMaxMetadata() : damage;
     }
 
-    public static boolean getMetadataSignifyEmpty(int damage, Item item) {
-        if (item instanceof IItemWithExtendedMetadata) {
-            IItemWithExtendedMetadata casted = (IItemWithExtendedMetadata) item;
-            return damage < casted.getMinEmptyMetadata() || damage > casted.getMaxEmptyMetadata();
-        }
-        return damage < -32768 || damage > 65535;
-    }
-
-    public static int getMinMetadata(Item item) {
-        return item instanceof IItemWithExtendedMetadata ? ((IItemWithExtendedMetadata) item).getMinMetadata() : 0;
+    @SuppressWarnings("all")
+    public static int getCorrectItemMetadataFromNBT(IItemMetadataExtension item, NBTTagCompound nbt) {
+        int damage = nbt.getInteger("Damage");
+        return damage < item.getMinMetadata() ? item.getMinMetadata() : damage > item.getMaxMetadata() ? item.getMaxMetadata() : damage;
     }
 
 }

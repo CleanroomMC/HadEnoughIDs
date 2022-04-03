@@ -1,6 +1,6 @@
 package com.cleanroommc.hadenoughids.test;
 
-import com.cleanroommc.hadenoughids.api.IItemWithExtendedMetadata;
+import com.cleanroommc.hadenoughids.api.IItemMetadataExtension;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +13,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import static com.cleanroommc.hadenoughids.HadEnoughIDs.MOD_ID;
 
-public class TestItem extends Item implements IItemWithExtendedMetadata {
+public class TestItem extends Item implements IItemMetadataExtension {
 
     public static final TestItem INSTANCE = new TestItem();
 
