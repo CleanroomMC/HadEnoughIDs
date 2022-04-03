@@ -1,7 +1,6 @@
 package com.cleanroommc.hadenoughids.core.hooks;
 
 import com.cleanroommc.hadenoughids.api.IItemMetadataExtension;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 
 @SuppressWarnings("unused")
