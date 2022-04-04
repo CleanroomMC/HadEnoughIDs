@@ -12,10 +12,10 @@ public class ItemStackPacketMethodVisitor extends MethodVisitor implements Opcod
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         if ("writeShort".equals(name)) {
-            super.visitMethodInsn(opcode, owner, "writeInteger", desc, itf);
+            super.visitMethodInsn(opcode, owner, "writeVarInt", desc, itf);
             return;
         } else if ("readShort".equals(name)) {
-            super.visitMethodInsn(opcode, owner, "readInteger", "()I", itf);
+            super.visitMethodInsn(opcode, owner, "readVarInt", "()I", itf);
             return;
         }
         super.visitMethodInsn(opcode, owner, name, desc, itf);
