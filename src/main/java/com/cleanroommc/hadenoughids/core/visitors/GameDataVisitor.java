@@ -33,7 +33,7 @@ public class GameDataVisitor extends ClassVisitor implements Opcodes {
             switch (operand) {
                 case 4095: // Blocks
                     // (((Integer.MAX_VALUE - 1) * 2) / 16) - 1
-                    // This is to account the Block::getStateId issue
+                    // This is to account for the Block::getStateId issue
                     // Theoretically could be slightly larger still
                     // Because vanilla only occupies 254 blocks, 1674 unique meta states
                     // Which averages to around 6.59 meta values occupied per block
