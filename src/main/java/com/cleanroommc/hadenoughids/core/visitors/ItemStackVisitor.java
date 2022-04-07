@@ -12,9 +12,6 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
     public static final String IS_EMPTY_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "isEmpty" : "func_190926_b";
     public static final String WRITE_TO_NBT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeToNBT" : "func_77955_b";
 
-    public static final String ITEM_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "item" : "field_151002_e";
-    public static final String ITEM_DAMAGE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "itemDamage" : "field_77991_e";
-
     public ItemStackVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
     }
@@ -38,6 +35,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
 
     private static class DelegatedInitMethodVisitor extends MethodVisitor {
 
+        private static final String ITEM_DAMAGE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "itemDamage" : "field_77991_e";
         private static final String STACK_SIZE_FIELD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "stackSize" : "field_77994_a";
 
         private boolean removeItemDamageChecks = false;
@@ -187,8 +185,6 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
 
     private static class IsEmptyMethodVisitor extends MethodVisitor {
 
-        // private boolean wipeItemDamageTernaryChecks = false;
-
         private IsEmptyMethodVisitor(MethodVisitor methodVisitor) {
             super(ASM5, methodVisitor);
         }
@@ -249,7 +245,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
             if (SET_SHORT_METHOD.equals(name)) {
-                super.visitMethodInsn(opcode, owner, SET_INTEGER_METHOD, desc.replace(";S", ";I"), itf);
+                super.visitMethodInsn(opcode, owner, SET_INTEGER_METHOD, desc.replace("S)", "I)"), itf);
                 return;
             }
             super.visitMethodInsn(opcode, owner, name, desc, itf);

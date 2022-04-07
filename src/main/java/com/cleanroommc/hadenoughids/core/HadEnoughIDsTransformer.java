@@ -59,6 +59,12 @@ public class HadEnoughIDsTransformer implements IClassTransformer {
                 new ClassReader(classBytes).accept(new NetHandlerPlayServerVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
+            case EnchantmentHelperVisitor.CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new EnchantmentHelperVisitor(classWriter), 0);
+                return classWriter.toByteArray();
+            }
         }
         return classBytes;
     }
