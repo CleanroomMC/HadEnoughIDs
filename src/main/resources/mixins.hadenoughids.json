@@ -9,6 +9,7 @@
     "ForgeRegistryAccessor",
     "RegistryManagerAccessor",
     "StatListMixin",
+    "WorldInfoMixin",
     "recipe.ShapelessOreRecipeMixin",
     "recipe.ShapelessRecipesMixin"
   ],
