@@ -11,6 +11,7 @@ public class NetHandlerPlayClientVisitor extends ClassVisitor implements Opcodes
     public static final String CLASS_NAME = "net.minecraft.client.network.NetHandlerPlayClient";
 
     public static final String HANDLE_ENTITY_EFFECT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "handleEntityEffect" : "func_147260_a";
+    public static final String HANDLE_SPAWN_OBJECT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "handleSpawnObject" : "func_147235_a";
 
     public NetHandlerPlayClientVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
@@ -21,6 +22,8 @@ public class NetHandlerPlayClientVisitor extends ClassVisitor implements Opcodes
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
         if (name.equals(HANDLE_ENTITY_EFFECT_METHOD)) {
             return new HandleEntityEffectMethodVisitor(visitor);
+        } else if (name.equals(HANDLE_SPAWN_OBJECT_METHOD)) {
+            return new HandleSpawnObjectMethodVisitor(visitor);
         }
         return visitor;
     }
@@ -70,6 +73,41 @@ public class NetHandlerPlayClientVisitor extends ClassVisitor implements Opcodes
         public void visitInsn(int opcode) {
             if (cancellingAndBitOp && opcode == IAND) {
                 cancellingAndBitOp = false;
+                return;
+            }
+            super.visitInsn(opcode);
+        }
+
+    }
+
+    private static class HandleSpawnObjectMethodVisitor extends MethodVisitor {
+
+        private boolean primed;
+
+        private HandleSpawnObjectMethodVisitor(MethodVisitor methodVisitor) {
+            super(ASM5, methodVisitor);
+        }
+
+        @Override
+        public void visitTypeInsn(int opcode, String type) {
+            if (type.equals("net/minecraft/entity/item/EntityFallingBlock")) {
+                primed = true;
+            }
+            super.visitTypeInsn(opcode, type);
+        }
+
+        @Override
+        public void visitLdcInsn(Object cst) {
+            if (primed && cst instanceof Integer && (Integer) cst == 65535) {
+                return;
+            }
+            super.visitLdcInsn(cst);
+        }
+
+        @Override
+        public void visitInsn(int opcode) {
+            if (primed && opcode == IAND) {
+                primed = false;
                 return;
             }
             super.visitInsn(opcode);
