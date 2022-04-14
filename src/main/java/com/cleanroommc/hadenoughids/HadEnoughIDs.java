@@ -29,6 +29,8 @@ public class HadEnoughIDs {
 
     public static final String MOD_ID = "hadenoughids";
 
+    public static final String WORLD_INFO_VERSION_NAME = "1.12.2 w/ HEID";
+
     @EventHandler
     public void onPreInit(FMLPreInitializationEvent event) {
         if (FMLLaunchHandler.isDeobfuscatedEnvironment()) {
