@@ -4,7 +4,7 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class EnchantmentShortToIntegerMethodVisitor extends MethodVisitor implements Opcodes {
+public class EnchantmentShortToIntegerGenericVisitor extends MethodVisitor implements Opcodes {
 
     private static final String GET_SHORT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "getShort" : "func_74765_d";
     private static final String GET_INTEGER_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "getInteger" : "func_74762_e";
@@ -13,7 +13,7 @@ public class EnchantmentShortToIntegerMethodVisitor extends MethodVisitor implem
 
     private boolean prepareChange;
 
-    public EnchantmentShortToIntegerMethodVisitor(MethodVisitor methodVisitor) {
+    public EnchantmentShortToIntegerGenericVisitor(MethodVisitor methodVisitor) {
         super(ASM5, methodVisitor);
     }
 

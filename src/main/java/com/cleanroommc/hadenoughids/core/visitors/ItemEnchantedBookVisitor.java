@@ -21,7 +21,7 @@ public class ItemEnchantedBookVisitor extends ClassVisitor implements Opcodes {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
         if (name.equals(ADD_INFORMATION_METHOD) || name.equals(ADD_ENCHANTMENT_METHOD)) {
-            return new EnchantmentShortToIntegerMethodVisitor(methodVisitor);
+            return new EnchantmentShortToIntegerGenericVisitor(methodVisitor);
         }
         return methodVisitor;
     }

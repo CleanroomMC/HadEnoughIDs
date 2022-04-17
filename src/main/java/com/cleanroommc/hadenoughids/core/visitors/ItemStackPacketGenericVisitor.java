@@ -3,9 +3,9 @@ package com.cleanroommc.hadenoughids.core.visitors;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-public class ItemStackPacketMethodVisitor extends MethodVisitor implements Opcodes {
+public class ItemStackPacketGenericVisitor extends MethodVisitor implements Opcodes {
 
-    public ItemStackPacketMethodVisitor(MethodVisitor methodVisitor) {
+    public ItemStackPacketGenericVisitor(MethodVisitor methodVisitor) {
         super(ASM5, methodVisitor);
     }
 

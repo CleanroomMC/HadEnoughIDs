@@ -24,7 +24,7 @@ public class EnchantmentHelperVisitor extends ClassVisitor implements Opcodes {
         MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
         if (name.equals(GET_ENCHANTMENT_LEVEL_METHOD) || name.equals(GET_ENCHANTMENTS_METHOD) || name.equals(APPLY_ENCHANTMENT_MODIFIER_METHOD) ||
                 name.equals(SET_ENCHANTMENTS_METHOD)) {
-            return new EnchantmentShortToIntegerMethodVisitor(methodVisitor);
+            return new EnchantmentShortToIntegerGenericVisitor(methodVisitor);
         }
         return methodVisitor;
     }

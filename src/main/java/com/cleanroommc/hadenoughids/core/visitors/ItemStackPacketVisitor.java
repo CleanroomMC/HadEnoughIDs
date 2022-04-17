@@ -28,7 +28,7 @@ public class ItemStackPacketVisitor extends ClassVisitor implements Opcodes {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
         if (methodValidator.test(name)) {
-            return new ItemStackPacketMethodVisitor(visitor);
+            return new ItemStackPacketGenericVisitor(visitor);
         }
         return visitor;
     }

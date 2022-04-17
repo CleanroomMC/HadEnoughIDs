@@ -77,6 +77,12 @@ public class HadEnoughIDsTransformer implements IClassTransformer {
                 new ClassReader(classBytes).accept(new GenLayerVoronoiZoomVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
+            case ChunkPrimerVisitor.CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new ChunkPrimerVisitor(classWriter), 0);
+                return classWriter.toByteArray();
+            }
         }
         return classBytes;
     }
