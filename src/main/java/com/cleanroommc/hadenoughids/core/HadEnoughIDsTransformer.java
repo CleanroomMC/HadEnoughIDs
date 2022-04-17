@@ -71,6 +71,12 @@ public class HadEnoughIDsTransformer implements IClassTransformer {
                 new ClassReader(classBytes).accept(new ItemEnchantedBookVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
+            case GenLayerVoronoiZoomVisitor.CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new GenLayerVoronoiZoomVisitor(classWriter), 0);
+                return classWriter.toByteArray();
+            }
         }
         return classBytes;
     }
