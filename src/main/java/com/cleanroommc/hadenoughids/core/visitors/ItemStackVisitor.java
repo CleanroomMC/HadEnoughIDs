@@ -3,15 +3,18 @@ package com.cleanroommc.hadenoughids.core.visitors;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.*;
 
+/**
+ * @see net.minecraft.item.ItemStack
+ */
 public class ItemStackVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.item.ItemStack";
 
-    public static final String DELEGATED_INIT_METHOD_DESC = "(Lnet/minecraft/item/Item;IILnet/minecraft/nbt/NBTTagCompound;)V";
-    public static final String NBT_INIT_METHOD_DESC = "(Lnet/minecraft/nbt/NBTTagCompound;)V";
-    public static final String IS_EMPTY_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "isEmpty" : "func_190926_b";
-    public static final String WRITE_TO_NBT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeToNBT" : "func_77955_b";
-    public static final String ADD_ENCHANTMENT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "addEnchantment" : "func_77966_a";
+    private static final String DELEGATED_INIT_METHOD_DESC = "(Lnet/minecraft/item/Item;IILnet/minecraft/nbt/NBTTagCompound;)V";
+    private static final String NBT_INIT_METHOD_DESC = "(Lnet/minecraft/nbt/NBTTagCompound;)V";
+    private static final String IS_EMPTY_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "isEmpty" : "func_190926_b";
+    private static final String WRITE_TO_NBT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeToNBT" : "func_77955_b";
+    private static final String ADD_ENCHANTMENT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "addEnchantment" : "func_77966_a";
 
     public ItemStackVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);

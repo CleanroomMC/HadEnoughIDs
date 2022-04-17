@@ -36,10 +36,10 @@ public class EnchantmentShortToIntegerGenericVisitor extends MethodVisitor imple
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         if (primed) {
-            if (name.equals(GET_SHORT_METHOD)) {
+            if (GET_SHORT_METHOD.equals(name)) {
                 super.visitMethodInsn(opcode, owner, GET_INTEGER_METHOD, desc.replace(")S", ")I"), itf);
                 primed = false;
-            } else if (name.equals(SET_SHORT_METHOD)) {
+            } else if (SET_SHORT_METHOD.equals(name)) {
                 primed = false;
                 super.visitMethodInsn(opcode, owner, SET_INTEGER_METHOD, desc.replace("S)", "I)"), itf);
             } else {

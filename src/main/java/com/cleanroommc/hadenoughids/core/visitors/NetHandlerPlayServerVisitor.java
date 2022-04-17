@@ -3,11 +3,14 @@ package com.cleanroommc.hadenoughids.core.visitors;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.*;
 
+/**
+ * @see net.minecraft.network.NetHandlerPlayServer
+ */
 public class NetHandlerPlayServerVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.network.NetHandlerPlayServer";
 
-    public static final String PROCESS_CREATIVE_INVENTORY_ACTION_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "processCreativeInventoryAction" : "func_147344_a";
+    private static final String PROCESS_CREATIVE_INVENTORY_ACTION_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "processCreativeInventoryAction" : "func_147344_a";
 
     public NetHandlerPlayServerVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
@@ -16,7 +19,7 @@ public class NetHandlerPlayServerVisitor extends ClassVisitor implements Opcodes
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
-        if (name.equals(PROCESS_CREATIVE_INVENTORY_ACTION_METHOD)) {
+        if (PROCESS_CREATIVE_INVENTORY_ACTION_METHOD.equals(name)) {
             return new ProcessCreativeInventoryActionMethodVisitor(visitor);
         }
         return visitor;

@@ -3,6 +3,9 @@ package com.cleanroommc.hadenoughids.core.visitors;
 import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.*;
 
+/**
+ * @see net.minecraft.world.chunk.ChunkPrimer
+ */
 public class ChunkPrimerVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.world.chunk.ChunkPrimer";

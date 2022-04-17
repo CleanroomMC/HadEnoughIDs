@@ -6,12 +6,15 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+/**
+ * @see net.minecraft.client.network.NetHandlerPlayClient
+ */
 public class NetHandlerPlayClientVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.client.network.NetHandlerPlayClient";
 
-    public static final String HANDLE_ENTITY_EFFECT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "handleEntityEffect" : "func_147260_a";
-    public static final String HANDLE_SPAWN_OBJECT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "handleSpawnObject" : "func_147235_a";
+    private static final String HANDLE_ENTITY_EFFECT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "handleEntityEffect" : "func_147260_a";
+    private static final String HANDLE_SPAWN_OBJECT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "handleSpawnObject" : "func_147235_a";
 
     public NetHandlerPlayClientVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
@@ -20,9 +23,9 @@ public class NetHandlerPlayClientVisitor extends ClassVisitor implements Opcodes
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
-        if (name.equals(HANDLE_ENTITY_EFFECT_METHOD)) {
+        if (HANDLE_ENTITY_EFFECT_METHOD.equals(name)) {
             return new HandleEntityEffectMethodVisitor(visitor);
-        } else if (name.equals(HANDLE_SPAWN_OBJECT_METHOD)) {
+        } else if (HANDLE_SPAWN_OBJECT_METHOD.equals(name)) {
             return new HandleSpawnObjectMethodVisitor(visitor);
         }
         return visitor;
@@ -90,7 +93,7 @@ public class NetHandlerPlayClientVisitor extends ClassVisitor implements Opcodes
 
         @Override
         public void visitTypeInsn(int opcode, String type) {
-            if (type.equals("net/minecraft/entity/item/EntityFallingBlock")) {
+            if ("net/minecraft/entity/item/EntityFallingBlock".equals(type)) {
                 primed = true;
             }
             super.visitTypeInsn(opcode, type);

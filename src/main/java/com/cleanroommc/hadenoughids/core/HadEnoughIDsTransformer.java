@@ -50,7 +50,7 @@ public class HadEnoughIDsTransformer implements IClassTransformer {
             {
                 ClassWriter classWriter = new ClassWriter(0);
                 new ClassReader(classBytes).accept(new ItemStackPacketVisitor(classWriter,
-                        s -> s.equals(ItemStackPacketVisitor.WRITE_ITEMSTACK) || s.equals(ItemStackPacketVisitor.READ_ITEMSTACK)), 0);
+                        s -> s.equals(ItemStackPacketVisitor.WRITE_ITEMSTACK_METHOD) || s.equals(ItemStackPacketVisitor.READ_ITEMSTACK_METHOD)), 0);
                 return classWriter.toByteArray();
             }
             case ItemVisitor.CLASS_NAME:

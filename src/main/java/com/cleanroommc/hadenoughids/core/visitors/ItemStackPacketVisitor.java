@@ -8,14 +8,18 @@ import org.objectweb.asm.Opcodes;
 
 import java.util.function.Predicate;
 
+/**
+ * @see net.minecraft.network.PacketBuffer
+ * @see net.minecraftforge.common.util.PacketUtil
+ */
 public class ItemStackPacketVisitor extends ClassVisitor implements Opcodes {
 
     public static final String PACKET_BUFFER_CLASS_NAME = "net.minecraft.network.PacketBuffer";
     public static final String PACKET_UTIL_CLASS_NAME = "net.minecraftforge.common.util.PacketUtil";
 
     public static final String WRITE_ITEMSTACK_FROM_CLIENT_TO_SERVER_METHOD = "writeItemStackFromClientToServer";
-    public static final String WRITE_ITEMSTACK = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeItemStack" : "func_150788_a";
-    public static final String READ_ITEMSTACK = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "readItemStack" : "func_150791_c";
+    public static final String WRITE_ITEMSTACK_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeItemStack" : "func_150788_a";
+    public static final String READ_ITEMSTACK_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "readItemStack" : "func_150791_c";
 
     private final Predicate<String> methodValidator;
 

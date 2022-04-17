@@ -5,6 +5,9 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+/**
+ * @see net.minecraftforge.registries.GameData
+ */
 public class GameDataVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraftforge.registries.GameData";

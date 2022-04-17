@@ -1,9 +1,13 @@
 package com.cleanroommc.hadenoughids.core.visitors;
 
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
 public class ItemStackPacketGenericVisitor extends MethodVisitor implements Opcodes {
+
+    private static final String WRITE_VAR_INT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeVarInt" : "func_150787_b";
+    private static final String READ_VAR_INT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "readVarInt" : "func_150792_a";
 
     public ItemStackPacketGenericVisitor(MethodVisitor methodVisitor) {
         super(ASM5, methodVisitor);
@@ -12,10 +16,10 @@ public class ItemStackPacketGenericVisitor extends MethodVisitor implements Opco
     @Override
     public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
         if ("writeShort".equals(name)) {
-            super.visitMethodInsn(opcode, owner, "writeVarInt", desc, itf);
+            super.visitMethodInsn(opcode, owner, WRITE_VAR_INT_METHOD, desc, itf);
             return;
         } else if ("readShort".equals(name)) {
-            super.visitMethodInsn(opcode, owner, "readVarInt", "()I", itf);
+            super.visitMethodInsn(opcode, owner, READ_VAR_INT_METHOD, "()I", itf);
             return;
         }
         super.visitMethodInsn(opcode, owner, name, desc, itf);

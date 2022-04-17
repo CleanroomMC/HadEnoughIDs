@@ -6,6 +6,9 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+/**
+ * @see net.minecraft.world.gen.layer.GenLayerVoronoiZoom
+ */
 public class GenLayerVoronoiZoomVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.world.gen.layer.GenLayerVoronoiZoom";

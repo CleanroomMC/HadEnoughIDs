@@ -3,6 +3,9 @@ package com.cleanroommc.hadenoughids.core.visitors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.objectweb.asm.*;
 
+/**
+ * @see net.minecraft.item.Item
+ */
 public class ItemVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.item.Item";

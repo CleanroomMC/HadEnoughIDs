@@ -4,6 +4,9 @@ import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import org.apache.commons.lang3.ArrayUtils;
 import org.objectweb.asm.*;
 
+/**
+ * @see net.minecraft.network.play.server.SPacketEntityEffect
+ */
 public class SPacketEntityEffectVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.network.play.server.SPacketEntityEffect";

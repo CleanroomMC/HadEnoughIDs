@@ -6,6 +6,9 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+/**
+ * @see net.minecraft.item.ItemEnchantedBook
+ */
 public class ItemEnchantedBookVisitor extends ClassVisitor implements Opcodes {
 
     public static final String CLASS_NAME = "net.minecraft.item.ItemEnchantedBook";
@@ -20,7 +23,7 @@ public class ItemEnchantedBookVisitor extends ClassVisitor implements Opcodes {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor methodVisitor = super.visitMethod(access, name, desc, signature, exceptions);
-        if (name.equals(ADD_INFORMATION_METHOD) || name.equals(ADD_ENCHANTMENT_METHOD)) {
+        if (ADD_INFORMATION_METHOD.equals(name) || ADD_ENCHANTMENT_METHOD.equals(name)) {
             return new EnchantmentShortToIntegerGenericVisitor(methodVisitor);
         }
         return methodVisitor;
