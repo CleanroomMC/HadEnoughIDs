@@ -11,6 +11,7 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
     public static final String NBT_INIT_METHOD_DESC = "(Lnet/minecraft/nbt/NBTTagCompound;)V";
     public static final String IS_EMPTY_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "isEmpty" : "func_190926_b";
     public static final String WRITE_TO_NBT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "writeToNBT" : "func_77955_b";
+    public static final String ADD_ENCHANTMENT_METHOD = FMLLaunchHandler.isDeobfuscatedEnvironment() ? "addEnchantment" : "func_77966_a";
 
     public ItemStackVisitor(ClassWriter classWriter) {
         super(ASM5, classWriter);
@@ -19,16 +20,18 @@ public class ItemStackVisitor extends ClassVisitor implements Opcodes {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor visitor = super.visitMethod(access, name, desc, signature, exceptions);
-        if (name.equals("<init>")) {
-            if (desc.equals(DELEGATED_INIT_METHOD_DESC)) {
+        if ("<init>".equals(name)) {
+            if (DELEGATED_INIT_METHOD_DESC.equals(desc)) {
                 return new DelegatedInitMethodVisitor(visitor);
-            } else if (desc.equals(NBT_INIT_METHOD_DESC)) {
+            } else if (NBT_INIT_METHOD_DESC.equals(desc)) {
                 return new NBTInitMethodVisitor(visitor);
             }
-        } else if (name.equals(IS_EMPTY_METHOD)) {
+        } else if (IS_EMPTY_METHOD.equals(name)) {
             return new IsEmptyMethodVisitor(visitor);
-        } else if (name.equals(WRITE_TO_NBT_METHOD)) {
+        } else if (WRITE_TO_NBT_METHOD.equals(name)) {
             return new WriteToNBTMethodVisitor(visitor);
+        } else if (ADD_ENCHANTMENT_METHOD.equals(name)) {
+            return new EnchantmentShortToIntegerGenericVisitor(visitor);
         }
         return visitor;
     }
