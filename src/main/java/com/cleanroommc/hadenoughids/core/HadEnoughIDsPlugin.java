@@ -17,7 +17,8 @@ public class HadEnoughIDsPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader 
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[] { "com.cleanroommc.hadenoughids.core.HadEnoughIDsTransformer" };
+        return null;
+        // return new String[] { "com.cleanroommc.hadenoughids.core.HadEnoughIDsTransformer" };
     }
 
     @Override
@@ -38,7 +39,7 @@ public class HadEnoughIDsPlugin implements IFMLLoadingPlugin, IEarlyMixinLoader 
 
     @Override
     public String getAccessTransformerClass() {
-        return null;
+        return "com.cleanroommc.hadenoughids.core.HadEnoughIDsTransformer";
     }
 
     @Override
