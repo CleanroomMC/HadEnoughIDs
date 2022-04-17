@@ -22,6 +22,12 @@ public class HadEnoughIDsTransformer implements IClassTransformer {
                 new ClassReader(classBytes).accept(new SPacketEntityEffectVisitor(classWriter), 0);
                 return classWriter.toByteArray();
             }
+            case SPacketRemoveEntityEffectVisitor.CLASS_NAME:
+            {
+                ClassWriter classWriter = new ClassWriter(0);
+                new ClassReader(classBytes).accept(new SPacketRemoveEntityEffectVisitor(classWriter), 0);
+                return classWriter.toByteArray();
+            }
             case NetHandlerPlayClientVisitor.CLASS_NAME:
             {
                 ClassWriter classWriter = new ClassWriter(0);
