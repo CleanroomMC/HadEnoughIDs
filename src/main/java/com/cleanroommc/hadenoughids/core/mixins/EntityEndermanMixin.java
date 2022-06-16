@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 @Mixin(EntityEnderman.class)
 public abstract class EntityEndermanMixin {
+
     @Shadow @Nullable public abstract IBlockState getHeldBlockState();
 
     /**
@@ -19,9 +20,10 @@ public abstract class EntityEndermanMixin {
      */
     @Redirect(method = "writeEntityToNBT", at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/NBTTagCompound;setShort(Ljava/lang/String;S)V", ordinal = 0))
     private void redirectCarried(NBTTagCompound instance, String key, short value) {
-        if(key.equals("carried")) {
+        if (key.equals("carried")) {
             instance.setString("carried", this.getHeldBlockState().getBlock().getRegistryName().toString());
-        } else
+        } else {
             instance.setShort(key, value);
+        }
     }
 }
